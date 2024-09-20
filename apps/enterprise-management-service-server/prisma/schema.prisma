@@ -1,0 +1,125 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Quotation {
+  createdAt        DateTime  @default(now())
+  customer         String?
+  id               String    @id @default(cuid())
+  quotationDetails String?
+  updatedAt        DateTime  @updatedAt
+  validUntil       DateTime?
+}
+
+model SaleOpportunity {
+  contracts       Contract[]
+  createdAt       DateTime   @default(now())
+  customer        String?
+  id              String     @id @default(cuid())
+  lead            Lead?      @relation(fields: [leadId], references: [id])
+  leadId          String?
+  progress        String?
+  revenueForecast Int?
+  updatedAt       DateTime   @updatedAt
+}
+
+model CustomerSegment {
+  createdAt   DateTime @default(now())
+  criteria    String?
+  id          String   @id @default(cuid())
+  segmentName String?
+  updatedAt   DateTime @updatedAt
+}
+
+model MarketActivity {
+  activityName String?
+  createdAt    DateTime @default(now())
+  evaluation   String?
+  id           String   @id @default(cuid())
+  participants String?
+  updatedAt    DateTime @updatedAt
+}
+
+model Order {
+  confirmation  Boolean?
+  createdAt     DateTime @default(now())
+  customer      String?
+  id            String   @id @default(cuid())
+  orderStatus   String?
+  orderTracking String?
+  payment       Boolean?
+  shippingInfo  String?
+  updatedAt     DateTime @updatedAt
+}
+
+model EmailCampaign {
+  campaignDetails String?
+  createdAt       DateTime @default(now())
+  id              String   @id @default(cuid())
+  status          String?
+  updatedAt       DateTime @updatedAt
+}
+
+model Contract {
+  contractDetails   String?
+  createdAt         DateTime         @default(now())
+  customer          String?
+  id                String           @id @default(cuid())
+  saleOpportunity   SaleOpportunity? @relation(fields: [saleOpportunityId], references: [id])
+  saleOpportunityId String?
+  updatedAt         DateTime         @updatedAt
+  validityPeriod    DateTime?
+}
+
+model CustomerLevel {
+  createdAt          DateTime       @default(now())
+  customerInfos      CustomerInfo[]
+  description        String?
+  id                 String         @id @default(cuid())
+  level              String?
+  potentialValue     Int?
+  transactionHistory String?
+  updatedAt          DateTime       @updatedAt
+}
+
+model CustomerInfo {
+  address              String?
+  communicationContent String?
+  companyInfo          String?
+  contactInfo          String?
+  createdAt            DateTime       @default(now())
+  customerLevel        CustomerLevel? @relation(fields: [customerLevelId], references: [id])
+  customerLevelId      String?
+  followUpLogs         String?
+  id                   String         @id @default(cuid())
+  name                 String?
+  updatedAt            DateTime       @updatedAt
+}
+
+model Lead {
+  conversionRate    Float?
+  createdAt         DateTime          @default(now())
+  customer          String?
+  id                String            @id @default(cuid())
+  leadSource        String?
+  saleOpportunities SaleOpportunity[]
+  status            String?
+  updatedAt         DateTime          @updatedAt
+}
+
+model User {
+  createdAt DateTime @default(now())
+  email     String?  @unique
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     Json
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
