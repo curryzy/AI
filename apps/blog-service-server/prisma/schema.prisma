@@ -1,0 +1,149 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Author {
+  blogs     Blog[]
+  createdAt DateTime @default(now())
+  email     String?
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  updatedAt DateTime @updatedAt
+}
+
+model Comment {
+  blog      Blog?    @relation(fields: [blogId], references: [id])
+  blogId    String?
+  content   String?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  updatedAt DateTime @updatedAt
+}
+
+model Blog {
+  author      Author?         @relation(fields: [authorId], references: [id])
+  authorId    String?
+  comments    Comment[]
+  content     String?
+  createdAt   DateTime        @default(now())
+  id          String          @id @default(cuid())
+  publishedAt DateTime?
+  status      EnumBlogStatus?
+  title       String?
+  updatedAt   DateTime        @updatedAt
+}
+
+model Inventory {
+  createdAt         DateTime  @default(now())
+  id                String    @id @default(cuid())
+  incomingDate      DateTime?
+  inventoryCount    Int?
+  outgoingDate      DateTime?
+  product           Product?  @relation(fields: [productId], references: [id])
+  productId         String?
+  updatedAt         DateTime  @updatedAt
+  warehouseLocation String?
+}
+
+model Product {
+  createdAt       DateTime    @default(now())
+  id              String      @id @default(cuid())
+  inventories     Inventory[]
+  inventoryStatus String?
+  price           Float?
+  productName     String?
+  specifications  String?
+  updatedAt       DateTime    @updatedAt
+}
+
+model CustomerLevel {
+  createdAt     DateTime       @default(now())
+  customerInfos CustomerInfo[]
+  description   String?
+  id            String         @id @default(cuid())
+  level         String?
+  updatedAt     DateTime       @updatedAt
+}
+
+model Order {
+  confirmation  Boolean?
+  createdAt     DateTime @default(now())
+  customer      String?
+  id            String   @id @default(cuid())
+  orderStatus   String?
+  orderTracking String?
+  payment       Boolean?
+  shippingInfo  String?
+  updatedAt     DateTime @updatedAt
+}
+
+model Lead {
+  conversionRate Float?
+  createdAt      DateTime @default(now())
+  customer       String?
+  id             String   @id @default(cuid())
+  leadSource     String?
+  status         String?
+  updatedAt      DateTime @updatedAt
+}
+
+model CustomerInfo {
+  address            String?
+  contactInfo        String?
+  createdAt          DateTime       @default(now())
+  customerLevel      CustomerLevel? @relation(fields: [customerLevelId], references: [id])
+  customerLevelId    String?
+  id                 String         @id @default(cuid())
+  interactionHistory String?
+  name               String?
+  updatedAt          DateTime       @updatedAt
+}
+
+model Quotation {
+  createdAt        DateTime  @default(now())
+  customer         String?
+  id               String    @id @default(cuid())
+  quotationDetails String?
+  updatedAt        DateTime  @updatedAt
+  validUntil       DateTime?
+}
+
+model SalesProcess {
+  createdAt  DateTime  @default(now())
+  customer   String?
+  followUp   DateTime?
+  id         String    @id @default(cuid())
+  salesStage String?
+  updatedAt  DateTime  @updatedAt
+}
+
+model Contract {
+  contractDetails String?
+  createdAt       DateTime  @default(now())
+  customer        String?
+  id              String    @id @default(cuid())
+  updatedAt       DateTime  @updatedAt
+  validityPeriod  DateTime?
+}
+
+model User {
+  createdAt DateTime @default(now())
+  email     String?  @unique
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     Json
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
+
+enum EnumBlogStatus {
+  Option1
+}
