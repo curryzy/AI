@@ -12,6 +12,7 @@ import { CustomerLevelModule } from "./customerLevel/customerLevel.module";
 import { CustomerInfoModule } from "./customerInfo/customerInfo.module";
 import { LeadModule } from "./lead/lead.module";
 import { UserModule } from "./user/user.module";
+import { AuthenticationModule } from "./authentication/authentication.module";
 import { CustomerManagementModuleModule } from "./customermanagementmodule/customermanagementmodule.module";
 import { MarketingManagementModuleModule } from "./marketingmanagementmodule/marketingmanagementmodule.module";
 import { SalesManagementModuleModule } from "./salesmanagementmodule/salesmanagementmodule.module";
@@ -41,6 +42,7 @@ import { LoggerModule } from "./logger/logger.module";
     CustomerInfoModule,
     LeadModule,
     UserModule,
+    AuthenticationModule,
     CustomerManagementModuleModule,
     MarketingManagementModuleModule,
     SalesManagementModuleModule,
